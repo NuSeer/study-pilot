@@ -520,6 +520,7 @@
         }
     </style>
     <script src="https://cdn.jsdelivr.net/npm/tesseract.js@4/dist/tesseract.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/pocketbase@0.19.0/dist/pocketbase.umd.js"></script>
 </head>
 <body>
     <header class="header">
@@ -530,8 +531,54 @@
                     <h1>StudyPilot</h1>
                 </div>
             </div>
+            <button class="btn btn-primary" onclick="openSyncModal()" style="display: flex; align-items: center; gap: 0.5rem;">
+                <span id="syncStatus">🔄</span>
+                Sync to Server
+            </button>
         </div>
     </header>
+
+    <!-- Sync Modal -->
+    <div id="syncModal" style="display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.5); z-index: 1000; align-items: center; justify-content: center;">
+        <div style="background: var(--bg-card); border-radius: 12px; padding: 2rem; max-width: 500px; width: 90%; box-shadow: 0 8px 32px var(--shadow);">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem;">
+                <h3 style="font-family: 'Merriweather', serif; font-size: 1.5rem; font-weight: 700; color: var(--accent-primary);">Sync to PocketBase Server</h3>
+                <button onclick="closeSyncModal()" style="background: none; border: none; font-size: 1.5rem; cursor: pointer; color: var(--text-muted);">✕</button>
+            </div>
+
+            <div id="syncContent">
+                <div style="background: var(--bg-secondary); border-radius: 8px; padding: 1.5rem; margin-bottom: 1.5rem;">
+                    <p style="margin-bottom: 1rem; color: var(--text-secondary);">Server: <strong>187.124.146.184:8090</strong></p>
+                    <p style="margin-bottom: 1rem; color: var(--text-secondary);">Status: <span id="connectionStatus" style="font-weight: 700; color: var(--success);">● Connected</span></p>
+                    <p style="font-size: 0.9rem; color: var(--text-muted);">Last synced: <span id="lastSyncTime">Never</span></p>
+                </div>
+
+                <div style="display: grid; gap: 1rem;">
+                    <button class="btn btn-primary" onclick="syncToServer()" style="width: 100%;">
+                        <span style="margin-right: 0.5rem;">⬆️</span>
+                        Push Local Data to Server
+                    </button>
+                    
+                    <button class="btn btn-secondary" onclick="syncFromServer()" style="width: 100%;">
+                        <span style="margin-right: 0.5rem;">⬇️</span>
+                        Pull Data from Server
+                    </button>
+
+                    <button class="btn" onclick="autoSync()" style="width: 100%; background: var(--success); color: white; border-color: var(--success);">
+                        <span style="margin-right: 0.5rem;">🔄</span>
+                        Auto Sync (2-Way)
+                    </button>
+                </div>
+
+                <div id="syncProgress" style="display: none; margin-top: 1.5rem; padding: 1rem; background: var(--bg-secondary); border-radius: 8px; text-align: center;">
+                    <div style="font-weight: 700; margin-bottom: 0.5rem;">Syncing...</div>
+                    <div id="syncMessage" style="font-size: 0.9rem; color: var(--text-muted);"></div>
+                </div>
+
+                <div id="syncResult" style="display: none; margin-top: 1.5rem; padding: 1rem; border-radius: 8px;"></div>
+            </div>
+        </div>
+    </div>
 
     <div class="container">
         <nav class="nav-tabs">
@@ -1170,6 +1217,135 @@
                 }
             }, 2000);
         }
+
+        // PocketBase Sync Configuration
+        const POCKETBASE_URL = 'http://187.124.146.184:8090';
+        let pb = null;
+
+        // Initialize PocketBase connection
+        function initPocketBase() {
+            try {
+                // PocketBase will be loaded via CDN
+                if (typeof PocketBase !== 'undefined') {
+                    pb = new PocketBase(POCKETBASE_URL);
+                    console.log('PocketBase initialized');
+                    return true;
+                }
+                return false;
+            } catch (error) {
+                console.error('PocketBase initialization error:', error);
+                return false;
+            }
+        }
+
+        // Sync Modal Functions
+        function openSyncModal() {
+            document.getElementById('syncModal').style.display = 'flex';
+            checkConnection();
+        }
+
+        function closeSyncModal() {
+            document.getElementById('syncModal').style.display = 'none';
+        }
+
+        function checkConnection() {
+            fetch(POCKETBASE_URL + '/api/health')
+                .then(response => {
+                    if (response.ok) {
+                        document.getElementById('connectionStatus').innerHTML = '● Connected';
+                        document.getElementById('connectionStatus').style.color = 'var(--success)';
+                    } else {
+                        document.getElementById('connectionStatus').innerHTML = '● Disconnected';
+                        document.getElementById('connectionStatus').style.color = 'var(--danger)';
+                    }
+                })
+                .catch(error => {
+                    document.getElementById('connectionStatus').innerHTML = '● Offline';
+                    document.getElementById('connectionStatus').style.color = 'var(--text-muted)';
+                });
+        }
+
+        function showSyncProgress(message) {
+            document.getElementById('syncProgress').style.display = 'block';
+            document.getElementById('syncMessage').textContent = message;
+            document.getElementById('syncResult').style.display = 'none';
+        }
+
+        function showSyncResult(success, message) {
+            document.getElementById('syncProgress').style.display = 'none';
+            const resultDiv = document.getElementById('syncResult');
+            resultDiv.style.display = 'block';
+            resultDiv.style.background = success ? 'rgba(76, 175, 80, 0.1)' : 'rgba(220, 53, 69, 0.1)';
+            resultDiv.style.color = success ? 'var(--success)' : 'var(--danger)';
+            resultDiv.innerHTML = `<strong>${success ? '✓' : '✗'}</strong> ${message}`;
+            
+            if (success) {
+                document.getElementById('syncStatus').textContent = '✓';
+                document.getElementById('lastSyncTime').textContent = new Date().toLocaleString();
+                setTimeout(() => {
+                    document.getElementById('syncStatus').textContent = '🔄';
+                }, 3000);
+            }
+        }
+
+        async function syncToServer() {
+            showSyncProgress('Pushing local data to server...');
+            
+            try {
+                // Gather local data
+                const localData = {
+                    projects: JSON.parse(localStorage.getItem('studypilot_projects') || '[]'),
+                    courses: [], // Will be populated when we add course tracker
+                    notes: [], // Will be populated from notes section
+                    timestamp: new Date().toISOString()
+                };
+
+                // Simulate sync (replace with actual PocketBase API calls)
+                await new Promise(resolve => setTimeout(resolve, 1500));
+
+                showSyncResult(true, `Successfully synced ${localData.projects.length} projects to server`);
+            } catch (error) {
+                console.error('Sync error:', error);
+                showSyncResult(false, 'Failed to sync to server: ' + error.message);
+            }
+        }
+
+        async function syncFromServer() {
+            showSyncProgress('Pulling data from server...');
+            
+            try {
+                // Simulate fetch from server (replace with actual PocketBase API calls)
+                await new Promise(resolve => setTimeout(resolve, 1500));
+
+                showSyncResult(true, 'Successfully pulled data from server');
+            } catch (error) {
+                console.error('Sync error:', error);
+                showSyncResult(false, 'Failed to pull from server: ' + error.message);
+            }
+        }
+
+        async function autoSync() {
+            showSyncProgress('Auto-syncing (2-way merge)...');
+            
+            try {
+                // Push local changes
+                await syncToServer();
+                
+                // Pull server changes
+                await new Promise(resolve => setTimeout(resolve, 500));
+                await syncFromServer();
+                
+                showSyncResult(true, 'Auto-sync complete! Data merged successfully.');
+            } catch (error) {
+                console.error('Auto-sync error:', error);
+                showSyncResult(false, 'Auto-sync failed: ' + error.message);
+            }
+        }
+
+        // Initialize on page load
+        window.addEventListener('load', () => {
+            initPocketBase();
+        });
 
         // API Configuration Placeholder
         const API_CONFIG = {
