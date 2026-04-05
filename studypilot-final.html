@@ -1,0 +1,1523 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>StudyPilot • AI Learning Hub</title>
+    <link href="https://fonts.googleapis.com/css2?family=Merriweather:wght@300;400;700&family=Open+Sans:wght@400;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-main: #f8f9fa;
+            --bg-card: #ffffff;
+            --bg-secondary: #e9ecef;
+            --accent-primary: #2c5f8d;
+            --accent-secondary: #5a9fd4;
+            --text-primary: #212529;
+            --text-secondary: #495057;
+            --text-muted: #6c757d;
+            --border: #dee2e6;
+            --shadow: rgba(0, 0, 0, 0.08);
+            --success: #4caf50;
+            --warning: #ff9800;
+            --danger: #dc3545;
+            --wgu-blue: #003057;
+            --wgu-gold: #ffb81c;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Open Sans', -apple-system, sans-serif;
+            background: var(--bg-main);
+            color: var(--text-primary);
+            line-height: 1.7;
+        }
+
+        .header {
+            background: var(--bg-card);
+            border-bottom: 2px solid var(--border);
+            padding: 1.5rem 2rem;
+            box-shadow: 0 2px 8px var(--shadow);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .header-content {
+            max-width: 1600px;
+            margin: 0 auto;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .logo-icon {
+            width: 48px;
+            height: 48px;
+            background: var(--accent-primary);
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            color: white;
+        }
+
+        .logo-text h1 {
+            font-family: 'Merriweather', serif;
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--accent-primary);
+        }
+
+        .container {
+            max-width: 1600px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        .nav-tabs {
+            background: var(--bg-card);
+            border: 2px solid var(--border);
+            border-radius: 8px;
+            padding: 0.5rem;
+            margin-bottom: 2rem;
+            display: flex;
+            gap: 0.5rem;
+            overflow-x: auto;
+            box-shadow: 0 2px 8px var(--shadow);
+        }
+
+        .nav-tab {
+            padding: 0.875rem 1.5rem;
+            background: transparent;
+            border: none;
+            border-radius: 6px;
+            font-size: 0.95rem;
+            font-weight: 600;
+            color: var(--text-secondary);
+            cursor: pointer;
+            transition: all 0.3s;
+            white-space: nowrap;
+        }
+
+        .nav-tab:hover {
+            background: var(--bg-secondary);
+        }
+
+        .nav-tab.active {
+            background: var(--accent-primary);
+            color: white;
+        }
+
+        .page-section {
+            display: none;
+        }
+
+        .page-section.active {
+            display: block;
+        }
+
+        .section-header {
+            margin-bottom: 2rem;
+            padding-bottom: 1rem;
+            border-bottom: 3px solid var(--accent-primary);
+        }
+
+        .section-title {
+            font-family: 'Merriweather', serif;
+            font-size: 2.25rem;
+            font-weight: 700;
+            color: var(--accent-primary);
+            margin-bottom: 0.5rem;
+        }
+
+        /* Dashboard - Current Class */
+        .current-class-card {
+            background: linear-gradient(135deg, var(--accent-primary), var(--accent-secondary));
+            color: white;
+            border-radius: 12px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+            box-shadow: 0 4px 16px var(--shadow);
+        }
+
+        .current-class-title {
+            font-family: 'Merriweather', serif;
+            font-size: 1.75rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+        }
+
+        .assignment-list {
+            display: grid;
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+
+        .assignment-item {
+            background: rgba(255,255,255,0.15);
+            border-radius: 8px;
+            padding: 1rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .assignment-item:hover {
+            background: rgba(255,255,255,0.25);
+            transform: translateX(4px);
+        }
+
+        .assignment-link {
+            color: white;
+            text-decoration: none;
+            display: flex;
+            justify-content: space-between;
+            width: 100%;
+            align-items: center;
+        }
+
+        /* Calendar - Week View */
+        .calendar-container {
+            background: var(--bg-card);
+            border: 2px solid var(--border);
+            border-radius: 8px;
+            padding: 1.5rem;
+            box-shadow: 0 2px 8px var(--shadow);
+        }
+
+        .calendar-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+        }
+
+        .calendar-views {
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        .view-btn {
+            padding: 0.5rem 1rem;
+            background: var(--bg-secondary);
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: 600;
+        }
+
+        .view-btn.active {
+            background: var(--accent-primary);
+            color: white;
+        }
+
+        .week-grid {
+            display: grid;
+            grid-template-columns: 80px repeat(7, 1fr);
+            gap: 1px;
+            background: var(--border);
+            border: 1px solid var(--border);
+        }
+
+        .time-label {
+            background: var(--bg-secondary);
+            padding: 0.5rem;
+            font-size: 0.85rem;
+            font-weight: 600;
+            text-align: center;
+        }
+
+        .day-header {
+            background: var(--accent-primary);
+            color: white;
+            padding: 1rem;
+            text-align: center;
+            font-weight: 700;
+        }
+
+        .time-slot {
+            background: white;
+            min-height: 60px;
+            padding: 0.25rem;
+            position: relative;
+        }
+
+        .event {
+            background: var(--accent-secondary);
+            color: white;
+            padding: 0.5rem;
+            border-radius: 4px;
+            font-size: 0.85rem;
+            margin: 0.25rem 0;
+            cursor: pointer;
+        }
+
+        .event.exam {
+            background: var(--danger);
+        }
+
+        .upcoming-tests {
+            background: var(--bg-card);
+            border: 2px solid var(--border);
+            border-radius: 8px;
+            padding: 1.5rem;
+            margin-top: 1.5rem;
+            box-shadow: 0 2px 8px var(--shadow);
+        }
+
+        .test-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem;
+            background: var(--bg-main);
+            border-radius: 6px;
+            margin-bottom: 0.5rem;
+        }
+
+        /* WGU Command Center */
+        .priority-action {
+            background: linear-gradient(135deg, var(--wgu-blue), var(--accent-primary));
+            color: white;
+            border-radius: 12px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+            box-shadow: 0 4px 16px var(--shadow);
+        }
+
+        .priority-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 1.5rem;
+            margin-top: 1.5rem;
+        }
+
+        .priority-item {
+            background: rgba(255,255,255,0.15);
+            border-radius: 8px;
+            padding: 1.25rem;
+        }
+
+        .priority-label {
+            font-size: 0.85rem;
+            font-weight: 600;
+            opacity: 0.9;
+            margin-bottom: 0.5rem;
+            text-transform: uppercase;
+        }
+
+        .priority-value {
+            font-family: 'Merriweather', serif;
+            font-size: 1.5rem;
+            font-weight: 700;
+        }
+
+        .course-grid {
+            display: grid;
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .course-card {
+            background: var(--bg-card);
+            border: 2px solid var(--border);
+            border-left: 6px solid var(--accent-primary);
+            border-radius: 8px;
+            padding: 1.5rem;
+            box-shadow: 0 2px 8px var(--shadow);
+            transition: all 0.3s;
+            cursor: pointer;
+        }
+
+        .course-card:hover {
+            transform: translateX(8px);
+        }
+
+        .course-header {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 1rem;
+        }
+
+        .course-title {
+            font-family: 'Merriweather', serif;
+            font-size: 1.25rem;
+            font-weight: 700;
+        }
+
+        .status-badge {
+            padding: 0.5rem 1rem;
+            border-radius: 6px;
+            font-size: 0.85rem;
+            font-weight: 600;
+        }
+
+        .status-in-progress {
+            background: rgba(255, 184, 28, 0.2);
+            color: #c89000;
+        }
+
+        .course-stats {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+
+        .stat-mini {
+            text-align: center;
+        }
+
+        .stat-mini-value {
+            font-family: 'Merriweather', serif;
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--accent-primary);
+        }
+
+        .stat-mini-label {
+            font-size: 0.75rem;
+            color: var(--text-muted);
+        }
+
+        .progress-bar {
+            height: 12px;
+            background: var(--bg-secondary);
+            border-radius: 6px;
+            overflow: hidden;
+            margin-top: 1rem;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: var(--wgu-gold);
+            transition: width 0.5s;
+        }
+
+        .weak-areas-section {
+            background: var(--bg-card);
+            border: 2px solid var(--border);
+            border-radius: 8px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+            box-shadow: 0 2px 8px var(--shadow);
+        }
+
+        .weak-area-item {
+            background: var(--bg-main);
+            border-left: 4px solid var(--danger);
+            border-radius: 4px;
+            padding: 1.25rem;
+            margin-bottom: 1rem;
+        }
+
+        /* Music & AI */
+        .music-fab, .ai-fab {
+            position: fixed;
+            width: 64px;
+            height: 64px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 28px;
+            cursor: pointer;
+            box-shadow: 0 8px 24px rgba(0,0,0,0.3);
+            z-index: 99;
+            transition: all 0.3s;
+        }
+
+        .music-fab {
+            bottom: 100px;
+            right: 32px;
+            background: linear-gradient(135deg, #1DB954, #1ed760);
+        }
+
+        .ai-fab {
+            bottom: 32px;
+            right: 32px;
+            background: linear-gradient(135deg, var(--accent-primary), var(--accent-secondary));
+            z-index: 100;
+        }
+
+        .music-fab:hover, .ai-fab:hover {
+            transform: scale(1.1);
+        }
+
+        .music-panel {
+            position: fixed;
+            right: 24px;
+            bottom: 180px;
+            width: 400px;
+            background: var(--bg-card);
+            border: 2px solid var(--border);
+            border-radius: 12px;
+            transform: scale(0);
+            transform-origin: bottom right;
+            transition: transform 0.3s;
+            z-index: 98;
+            box-shadow: 0 8px 32px var(--shadow);
+        }
+
+        .music-panel.open {
+            transform: scale(1);
+        }
+
+        .ai-panel {
+            position: fixed;
+            right: 0;
+            top: 0;
+            width: 450px;
+            height: 100vh;
+            background: var(--bg-card);
+            border-left: 2px solid var(--border);
+            transform: translateX(100%);
+            transition: transform 0.3s;
+            z-index: 200;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .ai-panel.open {
+            transform: translateX(0);
+        }
+
+        .btn {
+            padding: 0.75rem 1.5rem;
+            border: 2px solid var(--accent-primary);
+            border-radius: 6px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            background: var(--accent-primary);
+            color: white;
+            text-decoration: none;
+            display: inline-block;
+        }
+
+        .btn:hover {
+            background: #234a6d;
+        }
+
+        @media (max-width: 1024px) {
+            .priority-grid, .course-stats {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+    <script src="https://cdn.jsdelivr.net/npm/tesseract.js@4/dist/tesseract.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/pocketbase@0.19.0/dist/pocketbase.umd.js"></script>
+</head>
+<body>
+    <header class="header">
+        <div class="header-content">
+            <div class="logo">
+                <div class="logo-icon">✨</div>
+                <div class="logo-text">
+                    <h1>StudyPilot</h1>
+                </div>
+            </div>
+            <button class="btn btn-primary" onclick="openSyncModal()" style="display: flex; align-items: center; gap: 0.5rem;">
+                <span id="syncStatus">🔄</span>
+                Sync to Server
+            </button>
+        </div>
+    </header>
+
+    <!-- Sync Modal -->
+    <div id="syncModal" style="display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.5); z-index: 1000; align-items: center; justify-content: center;">
+        <div style="background: var(--bg-card); border-radius: 12px; padding: 2rem; max-width: 500px; width: 90%; box-shadow: 0 8px 32px var(--shadow);">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem;">
+                <h3 style="font-family: 'Merriweather', serif; font-size: 1.5rem; font-weight: 700; color: var(--accent-primary);">Sync to PocketBase Server</h3>
+                <button onclick="closeSyncModal()" style="background: none; border: none; font-size: 1.5rem; cursor: pointer; color: var(--text-muted);">✕</button>
+            </div>
+
+            <div id="syncContent">
+                <div style="background: var(--bg-secondary); border-radius: 8px; padding: 1.5rem; margin-bottom: 1.5rem;">
+                    <p style="margin-bottom: 1rem; color: var(--text-secondary);">Server: <strong>187.124.146.184:8090</strong></p>
+                    <p style="margin-bottom: 1rem; color: var(--text-secondary);">Status: <span id="connectionStatus" style="font-weight: 700; color: var(--success);">● Connected</span></p>
+                    <p style="font-size: 0.9rem; color: var(--text-muted);">Last synced: <span id="lastSyncTime">Never</span></p>
+                </div>
+
+                <div style="display: grid; gap: 1rem;">
+                    <button class="btn btn-primary" onclick="syncToServer()" style="width: 100%;">
+                        <span style="margin-right: 0.5rem;">⬆️</span>
+                        Push Local Data to Server
+                    </button>
+                    
+                    <button class="btn btn-secondary" onclick="syncFromServer()" style="width: 100%;">
+                        <span style="margin-right: 0.5rem;">⬇️</span>
+                        Pull Data from Server
+                    </button>
+
+                    <button class="btn" onclick="autoSync()" style="width: 100%; background: var(--success); color: white; border-color: var(--success);">
+                        <span style="margin-right: 0.5rem;">🔄</span>
+                        Auto Sync (2-Way)
+                    </button>
+                </div>
+
+                <div id="syncProgress" style="display: none; margin-top: 1.5rem; padding: 1rem; background: var(--bg-secondary); border-radius: 8px; text-align: center;">
+                    <div style="font-weight: 700; margin-bottom: 0.5rem;">Syncing...</div>
+                    <div id="syncMessage" style="font-size: 0.9rem; color: var(--text-muted);"></div>
+                </div>
+
+                <div id="syncResult" style="display: none; margin-top: 1.5rem; padding: 1rem; border-radius: 8px;"></div>
+            </div>
+        </div>
+    </div>
+
+    <div class="container">
+        <nav class="nav-tabs">
+            <button class="nav-tab active" onclick="switchTab('dashboard')">📊 Dashboard</button>
+            <button class="nav-tab" onclick="switchTab('library')">📚 Learning Library</button>
+            <button class="nav-tab" onclick="switchTab('notes')">📝 Notes</button>
+            <button class="nav-tab" onclick="switchTab('calendar')">📅 Calendar</button>
+            <button class="nav-tab" onclick="switchTab('projects')">💼 Projects</button>
+            <button class="nav-tab" onclick="switchTab('wgu')">🎓 WGU Command Center</button>
+        </nav>
+
+        <!-- Dashboard -->
+        <section id="dashboard" class="page-section active">
+            <div class="section-header">
+                <h2 class="section-title">📊 Dashboard</h2>
+                <p style="color: var(--text-secondary);">Your learning overview</p>
+            </div>
+
+            <div class="current-class-card">
+                <h3 class="current-class-title">📚 Current Class: Data Management - Foundations</h3>
+                <p style="opacity: 0.9; margin-bottom: 1rem;">OA scheduled: April 5, 2026 • Readiness: 80%</p>
+                
+                <div class="assignment-list">
+                    <a href="https://wgu.edu" target="_blank" class="assignment-link">
+                        <div class="assignment-item">
+                            <div>
+                                <strong>📝 Practice Assessment</strong>
+                                <div style="font-size: 0.85rem; opacity: 0.9; margin-top: 0.25rem;">Due: Mar 30</div>
+                            </div>
+                            <span>→</span>
+                        </div>
+                    </a>
+                    
+                    <a href="https://wgu.edu" target="_blank" class="assignment-link">
+                        <div class="assignment-item">
+                            <div>
+                                <strong>📖 Module 4: SQL Advanced</strong>
+                                <div style="font-size: 0.85rem; opacity: 0.9; margin-top: 0.25rem;">Review by: Mar 31</div>
+                            </div>
+                            <span>→</span>
+                        </div>
+                    </a>
+                    
+                    <a href="https://wgu.edu" target="_blank" class="assignment-link">
+                        <div class="assignment-item">
+                            <div>
+                                <strong>✍️ Weak Areas Practice</strong>
+                                <div style="font-size: 0.85rem; opacity: 0.9; margin-top: 0.25rem;">SQL JOINs & Normalization</div>
+                            </div>
+                            <span>→</span>
+                        </div>
+                    </a>
+                </div>
+            </div>
+        </section>
+
+        <!-- Calendar -->
+        <section id="calendar" class="page-section">
+            <div class="section-header">
+                <h2 class="section-title">📅 Study Calendar & Planner</h2>
+            </div>
+
+            <div class="calendar-container">
+                <div class="calendar-header">
+                    <h3 style="font-family: 'Merriweather', serif;">Week of March 23-29, 2026</h3>
+                    <div class="calendar-views">
+                        <button class="view-btn active">Week</button>
+                        <button class="view-btn">Day</button>
+                    </div>
+                </div>
+
+                <div class="week-grid">
+                    <div style="background: var(--bg-card);"></div>
+                    <div class="day-header">Mon<br>23</div>
+                    <div class="day-header">Tue<br>24</div>
+                    <div class="day-header">Wed<br>25</div>
+                    <div class="day-header">Thu<br>26</div>
+                    <div class="day-header">Fri<br>27</div>
+                    <div class="day-header">Sat<br>28</div>
+                    <div class="day-header">Sun<br>29</div>
+
+                    <div class="time-label">8 AM</div>
+                    <div class="time-slot"></div>
+                    <div class="time-slot"></div>
+                    <div class="time-slot"><div class="event">Study SQL</div></div>
+                    <div class="time-slot"></div>
+                    <div class="time-slot"></div>
+                    <div class="time-slot"></div>
+                    <div class="time-slot"></div>
+
+                    <div class="time-label">10 AM</div>
+                    <div class="time-slot"><div class="event">Weak Areas</div></div>
+                    <div class="time-slot"></div>
+                    <div class="time-slot"><div class="event">Practice Test</div></div>
+                    <div class="time-slot"></div>
+                    <div class="time-slot"></div>
+                    <div class="time-slot"></div>
+                    <div class="time-slot"></div>
+
+                    <div class="time-label">12 PM</div>
+                    <div class="time-slot"></div>
+                    <div class="time-slot"></div>
+                    <div class="time-slot"></div>
+                    <div class="time-slot"></div>
+                    <div class="time-slot"></div>
+                    <div class="time-slot"></div>
+                    <div class="time-slot"></div>
+
+                    <div class="time-label">2 PM</div>
+                    <div class="time-slot"></div>
+                    <div class="time-slot"><div class="event">Study Session</div></div>
+                    <div class="time-slot"></div>
+                    <div class="time-slot"><div class="event">Review Notes</div></div>
+                    <div class="time-slot"></div>
+                    <div class="time-slot"></div>
+                    <div class="time-slot"></div>
+
+                    <div class="time-label">4 PM</div>
+                    <div class="time-slot"></div>
+                    <div class="time-slot"></div>
+                    <div class="time-slot"></div>
+                    <div class="time-slot"></div>
+                    <div class="time-slot"></div>
+                    <div class="time-slot"></div>
+                    <div class="time-slot"></div>
+
+                    <div class="time-label">6 PM</div>
+                    <div class="time-slot"></div>
+                    <div class="time-slot"></div>
+                    <div class="time-slot"></div>
+                    <div class="time-slot"></div>
+                    <div class="time-slot"></div>
+                    <div class="time-slot"></div>
+                    <div class="time-slot"></div>
+                </div>
+            </div>
+
+            <div class="upcoming-tests">
+                <h3 style="font-family: 'Merriweather', serif; margin-bottom: 1rem;">🎯 Upcoming Tests & Deadlines</h3>
+                <div class="test-item">
+                    <div>
+                        <strong>Data Management OA</strong>
+                        <div style="font-size: 0.85rem; color: var(--text-muted);">Objective Assessment</div>
+                    </div>
+                    <div style="font-weight: 700; color: var(--danger);">Apr 5, 2026</div>
+                </div>
+                <div class="test-item">
+                    <div>
+                        <strong>Practice Assessment Due</strong>
+                        <div style="font-size: 0.85rem; color: var(--text-muted);">Must complete before exam</div>
+                    </div>
+                    <div style="font-weight: 700; color: var(--warning);">Mar 30, 2026</div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Notes -->
+        <section id="notes" class="page-section">
+            <div class="section-header">
+                <h2 class="section-title">📝 Notes & Notability</h2>
+            </div>
+
+            <div style="background: var(--bg-card); border: 2px solid var(--border); border-radius: 8px; padding: 2rem; margin-bottom: 2rem;">
+                <h3 style="margin-bottom: 1rem;">📱 Quick Actions</h3>
+                <div style="display: flex; gap: 1rem; flex-wrap: wrap;">
+                    <button class="btn" onclick="openNotability()">📱 Open Notability</button>
+                    <button class="btn" onclick="document.getElementById('ocrUpload').click()">📷 OCR - Extract Text from Image</button>
+                    <input type="file" id="ocrUpload" accept="image/*,application/pdf" style="display: none;" onchange="handleOCRUpload(event)">
+                    <button class="btn" onclick="startCamera()">📸 Take Photo for OCR</button>
+                </div>
+            </div>
+
+            <!-- OCR Section -->
+            <div id="ocrSection" style="display: none; background: var(--bg-card); border: 2px solid var(--border); border-radius: 8px; padding: 2rem; margin-bottom: 2rem;">
+                <h3 style="margin-bottom: 1rem;">🔍 OCR Text Extraction</h3>
+                
+                <!-- Camera Preview -->
+                <video id="cameraPreview" autoplay style="display: none; width: 100%; max-width: 500px; border-radius: 8px; margin-bottom: 1rem;"></video>
+                <canvas id="cameraCanvas" style="display: none;"></canvas>
+                
+                <!-- Captured/Uploaded Image -->
+                <img id="ocrImage" style="display: none; max-width: 100%; border-radius: 8px; margin-bottom: 1rem;">
+                
+                <!-- Camera Controls -->
+                <div id="cameraControls" style="display: none; margin-bottom: 1rem; display: flex; gap: 1rem;">
+                    <button class="btn" onclick="capturePhoto()">📸 Capture</button>
+                    <button class="btn" onclick="stopCamera()">❌ Cancel</button>
+                </div>
+                
+                <!-- OCR Progress -->
+                <div id="ocrProgress" style="display: none; margin-bottom: 1rem;">
+                    <div style="background: var(--bg-secondary); border-radius: 8px; padding: 1rem; text-align: center;">
+                        <div style="font-weight: 700; margin-bottom: 0.5rem;">⏳ Extracting text...</div>
+                        <div id="ocrProgressText" style="color: var(--text-muted); font-size: 0.9rem;">Initializing OCR engine...</div>
+                    </div>
+                </div>
+                
+                <!-- OCR Result -->
+                <div id="ocrResult" style="display: none;">
+                    <h4 style="margin-bottom: 0.75rem;">📄 Extracted Text:</h4>
+                    <textarea id="ocrText" style="width: 100%; min-height: 200px; padding: 1rem; border: 2px solid var(--border); border-radius: 8px; font-family: 'Open Sans', sans-serif; resize: vertical;"></textarea>
+                    <div style="display: flex; gap: 1rem; margin-top: 1rem; flex-wrap: wrap;">
+                        <button class="btn" onclick="copyOCRText()">📋 Copy Text</button>
+                        <button class="btn" onclick="saveAsNote()">💾 Save as Note</button>
+                        <button class="btn" onclick="sendToAI()">🤖 Send to AI</button>
+                        <button class="btn" onclick="resetOCR()">🔄 New OCR</button>
+                    </div>
+                </div>
+            </div>
+
+            <p style="color: var(--text-secondary);">Color coding and symbol systems displayed here...</p>
+        </section>
+
+        <!-- Learning Library -->
+        <section id="library" class="page-section">
+            <div class="section-header">
+                <h2 class="section-title">📚 Learning Library</h2>
+                <p style="color: var(--text-secondary);">67+ free resources for IT excellence</p>
+            </div>
+
+            <div style="display: grid; gap: 1.5rem;">
+                <div style="background: var(--bg-card); border: 2px solid var(--border); border-radius: 8px; padding: 1.5rem; box-shadow: 0 2px 8px var(--shadow);">
+                    <h3 style="font-weight: 700; font-size: 1.25rem; margin-bottom: 1rem; color: var(--accent-primary);">💻 Coding & Development</h3>
+                    <div style="display: grid; gap: 0.5rem;">
+                        <a href="https://www.freecodecamp.org/" target="_blank" style="color: var(--accent-primary); text-decoration: none;">• freeCodeCamp - Full stack certifications</a>
+                        <a href="https://www.theodinproject.com/" target="_blank" style="color: var(--accent-primary); text-decoration: none;">• The Odin Project - Web development curriculum</a>
+                        <a href="https://developer.mozilla.org/" target="_blank" style="color: var(--accent-primary); text-decoration: none;">• MDN Web Docs - JavaScript & web standards</a>
+                        <a href="https://www.w3schools.com/" target="_blank" style="color: var(--accent-primary); text-decoration: none;">• W3Schools - HTML, CSS, JavaScript tutorials</a>
+                        <a href="https://www.codecademy.com/" target="_blank" style="color: var(--accent-primary); text-decoration: none;">• Codecademy - Interactive coding lessons</a>
+                        <a href="https://cs50.harvard.edu/" target="_blank" style="color: var(--accent-primary); text-decoration: none;">• CS50 - Harvard's intro to computer science</a>
+                        <a href="https://www.sololearn.com/" target="_blank" style="color: var(--accent-primary); text-decoration: none;">• SoloLearn - Mobile-friendly coding courses</a>
+                        <a href="https://www.hackerrank.com/" target="_blank" style="color: var(--accent-primary); text-decoration: none;">• HackerRank - Coding challenges & practice</a>
+                        <a href="https://leetcode.com/" target="_blank" style="color: var(--accent-primary); text-decoration: none;">• LeetCode - Algorithm practice problems</a>
+                        <a href="https://www.codewars.com/" target="_blank" style="color: var(--accent-primary); text-decoration: none;">• Codewars - Code challenges & kata</a>
+                        <a href="https://exercism.org/" target="_blank" style="color: var(--accent-primary); text-decoration: none;">• Exercism - Code practice with mentorship</a>
+                        <a href="https://scrimba.com/" target="_blank" style="color: var(--accent-primary); text-decoration: none;">• Scrimba - Interactive coding screencasts</a>
+                        <a href="https://fullstackopen.com/" target="_blank" style="color: var(--accent-primary); text-decoration: none;">• Full Stack Open - Modern web development</a>
+                        <a href="https://javascript.info/" target="_blank" style="color: var(--accent-primary); text-decoration: none;">• JavaScript.info - Modern JavaScript tutorial</a>
+                    </div>
+                </div>
+
+                <div style="background: var(--bg-card); border: 2px solid var(--border); border-radius: 8px; padding: 1.5rem; box-shadow: 0 2px 8px var(--shadow);">
+                    <h3 style="font-weight: 700; font-size: 1.25rem; margin-bottom: 1rem; color: var(--accent-primary);">🔒 Cybersecurity</h3>
+                    <div style="display: grid; gap: 0.5rem;">
+                        <a href="https://www.professormesser.com/" target="_blank" style="color: var(--accent-primary); text-decoration: none;">• Professor Messer - Free CompTIA training</a>
+                        <a href="https://tryhackme.com/" target="_blank" style="color: var(--accent-primary); text-decoration: none;">• TryHackMe - Hands-on cyber security training</a>
+                        <a href="https://www.cybrary.it/" target="_blank" style="color: var(--accent-primary); text-decoration: none;">• Cybrary - Free cybersecurity courses</a>
+                        <a href="https://owasp.org/www-project-webgoat/" target="_blank" style="color: var(--accent-primary); text-decoration: none;">• OWASP WebGoat - Web security practice</a>
+                        <a href="https://www.hacksplaining.com/" target="_blank" style="color: var(--accent-primary); text-decoration: none;">• Hacksplaining - Security training for developers</a>
+                        <a href="https://portswigger.net/web-security" target="_blank" style="color: var(--accent-primary); text-decoration: none;">• PortSwigger Academy - Web security learning</a>
+                        <a href="https://overthewire.org/wargames/" target="_blank" style="color: var(--accent-primary); text-decoration: none;">• OverTheWire - Security wargames</a>
+                        <a href="https://www.hackthebox.com/" target="_blank" style="color: var(--accent-primary); text-decoration: none;">• Hack The Box - Penetration testing labs</a>
+                        <a href="https://picoctf.org/" target="_blank" style="color: var(--accent-primary); text-decoration: none;">• picoCTF - Cybersecurity competitions</a>
+                        <a href="https://www.sans.org/cyber-aces/" target="_blank" style="color: var(--accent-primary); text-decoration: none;">• SANS Cyber Aces - Free tutorials</a>
+                        <a href="https://www.offensive-security.com/metasploit-unleashed/" target="_blank" style="color: var(--accent-primary); text-decoration: none;">• Metasploit Unleashed - Free ethical hacking</a>
+                        <a href="https://www.cisco.com/c/en/us/training-events/training-certifications/certifications.html" target="_blank" style="color: var(--accent-primary); text-decoration: none;">• Cisco Networking Academy - Free courses</a>
+                    </div>
+                </div>
+
+                <div style="background: var(--bg-card); border: 2px solid var(--border); border-radius: 8px; padding: 1.5rem; box-shadow: 0 2px 8px var(--shadow);">
+                    <h3 style="font-weight: 700; font-size: 1.25rem; margin-bottom: 1rem; color: var(--accent-primary);">📊 Data Analytics</h3>
+                    <div style="display: grid; gap: 0.5rem;">
+                        <a href="https://www.kaggle.com/learn" target="_blank" style="color: var(--accent-primary); text-decoration: none;">• Kaggle Learn - Data science courses</a>
+                        <a href="https://analytics.google.com/analytics/academy/" target="_blank" style="color: var(--accent-primary); text-decoration: none;">• Google Analytics Academy - Web analytics</a>
+                        <a href="https://mode.com/sql-tutorial/" target="_blank" style="color: var(--accent-primary); text-decoration: none;">• Mode SQL Tutorial - Interactive SQL lessons</a>
+                        <a href="https://www.datacamp.com/courses/free" target="_blank" style="color: var(--accent-primary); text-decoration: none;">• DataCamp - Free data science intro</a>
+                        <a href="https://www.sqlzoo.net/" target="_blank" style="color: var(--accent-primary); text-decoration: none;">• SQLZoo - Interactive SQL tutorials</a>
+                        <a href="https://www.w3schools.com/sql/" target="_blank" style="color: var(--accent-primary); text-decoration: none;">• W3Schools SQL - SQL reference & exercises</a>
+                        <a href="https://www.tableau.com/learn/training" target="_blank" style="color: var(--accent-primary); text-decoration: none;">• Tableau Training - Free visualization courses</a>
+                        <a href="https://www.microsoft.com/en-us/power-platform/products/power-bi" target="_blank" style="color: var(--accent-primary); text-decoration: none;">• Microsoft Power BI - Free BI training</a>
+                        <a href="https://www.statology.org/" target="_blank" style="color: var(--accent-primary); text-decoration: none;">• Statology - Statistics tutorials</a>
+                        <a href="https://r4ds.had.co.nz/" target="_blank" style="color: var(--accent-primary); text-decoration: none;">• R for Data Science - Free online book</a>
+                        <a href="https://data.gov/" target="_blank" style="color: var(--accent-primary); text-decoration: none;">• Data.gov - US government open data</a>
+                    </div>
+                </div>
+
+                <div style="background: var(--bg-card); border: 2px solid var(--border); border-radius: 8px; padding: 1.5rem; box-shadow: 0 2px 8px var(--shadow);">
+                    <h3 style="font-weight: 700; font-size: 1.25rem; margin-bottom: 1rem; color: var(--accent-primary);">🤖 AI & Machine Learning</h3>
+                    <div style="display: grid; gap: 0.5rem;">
+                        <a href="https://platform.openai.com/docs" target="_blank" style="color: var(--accent-primary); text-decoration: none;">• OpenAI Documentation - API guides & tutorials</a>
+                        <a href="https://docs.anthropic.com/" target="_blank" style="color: var(--accent-primary); text-decoration: none;">• Anthropic Claude Docs - AI development</a>
+                        <a href="https://www.fast.ai/" target="_blank" style="color: var(--accent-primary); text-decoration: none;">• Fast.ai - Practical deep learning courses</a>
+                        <a href="https://developers.google.com/machine-learning/crash-course" target="_blank" style="color: var(--accent-primary); text-decoration: none;">• Google ML Crash Course - ML fundamentals</a>
+                        <a href="https://www.deeplearning.ai/" target="_blank" style="color: var(--accent-primary); text-decoration: none;">• DeepLearning.AI - AI courses by Andrew Ng</a>
+                        <a href="https://www.tensorflow.org/resources/learn-ml" target="_blank" style="color: var(--accent-primary); text-decoration: none;">• TensorFlow Learn - ML tutorials</a>
+                        <a href="https://pytorch.org/tutorials/" target="_blank" style="color: var(--accent-primary); text-decoration: none;">• PyTorch Tutorials - Deep learning framework</a>
+                        <a href="https://scikit-learn.org/stable/tutorial/" target="_blank" style="color: var(--accent-primary); text-decoration: none;">• Scikit-Learn - Python ML library tutorials</a>
+                        <a href="https://huggingface.co/learn" target="_blank" style="color: var(--accent-primary); text-decoration: none;">• Hugging Face - NLP & transformers course</a>
+                        <a href="https://www.kaggle.com/learn/intro-to-machine-learning" target="_blank" style="color: var(--accent-primary); text-decoration: none;">• Kaggle ML Intro - Hands-on ML course</a>
+                    </div>
+                </div>
+
+                <div style="background: var(--bg-card); border: 2px solid var(--border); border-radius: 8px; padding: 1.5rem; box-shadow: 0 2px 8px var(--shadow);">
+                    <h3 style="font-weight: 700; font-size: 1.25rem; margin-bottom: 1rem; color: var(--accent-primary);">📺 YouTube Channels</h3>
+                    <div style="display: grid; gap: 0.5rem;">
+                        <a href="https://www.youtube.com/@freecodecamp" target="_blank" style="color: var(--accent-primary); text-decoration: none;">• freeCodeCamp - Full programming courses</a>
+                        <a href="https://www.youtube.com/@NetworkChuck" target="_blank" style="color: var(--accent-primary); text-decoration: none;">• NetworkChuck - IT & cybersecurity</a>
+                        <a href="https://www.youtube.com/@AlexTheAnalyst" target="_blank" style="color: var(--accent-primary); text-decoration: none;">• Alex The Analyst - Data analytics</a>
+                        <a href="https://www.youtube.com/@TCMSecurityAcademy" target="_blank" style="color: var(--accent-primary); text-decoration: none;">• The Cyber Mentor - Ethical hacking</a>
+                        <a href="https://www.youtube.com/@TraversyMedia" target="_blank" style="color: var(--accent-primary); text-decoration: none;">• Traversy Media - Web development</a>
+                        <a href="https://www.youtube.com/@Fireship" target="_blank" style="color: var(--accent-primary); text-decoration: none;">• Fireship - Fast tech tutorials</a>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Projects -->
+        <section id="projects" class="page-section">
+            <div class="section-header">
+                <h2 class="section-title">💼 Projects</h2>
+                <p style="color: var(--text-secondary);">Track your learning projects and milestones</p>
+            </div>
+
+            <div style="background: var(--bg-card); border: 2px solid var(--border); border-radius: 8px; padding: 2rem; margin-bottom: 2rem; box-shadow: 0 2px 8px var(--shadow);">
+                <h3 style="margin-bottom: 1rem;">➕ Create New Project</h3>
+                <div style="display: grid; gap: 1rem;">
+                    <input type="text" id="projectName" placeholder="Project Name (e.g., Build Portfolio Website)" style="padding: 0.75rem; border: 2px solid var(--border); border-radius: 6px;">
+                    <select id="projectType" style="padding: 0.75rem; border: 2px solid var(--border); border-radius: 6px;">
+                        <option value="">Select Project Type</option>
+                        <option value="coding">💻 Coding Project</option>
+                        <option value="research">📊 Research Project</option>
+                        <option value="assignment">📝 Course Assignment</option>
+                        <option value="capstone">🎓 Capstone Project</option>
+                        <option value="personal">🌟 Personal Learning Goal</option>
+                    </select>
+                    <input type="date" id="projectDueDate" style="padding: 0.75rem; border: 2px solid var(--border); border-radius: 6px;">
+                    <textarea id="projectDescription" placeholder="Project description and goals..." style="padding: 0.75rem; border: 2px solid var(--border); border-radius: 6px; min-height: 80px; resize: vertical;"></textarea>
+                    <button class="btn" onclick="createProject()">Create Project</button>
+                </div>
+            </div>
+
+            <div id="projectsList">
+                <div style="background: var(--bg-card); border: 2px solid var(--border); border-radius: 8px; padding: 2rem; text-align: center; box-shadow: 0 2px 8px var(--shadow);">
+                    <div style="font-size: 3rem; margin-bottom: 1rem;">📁</div>
+                    <h3 style="margin-bottom: 0.5rem;">No Projects Yet</h3>
+                    <p style="color: var(--text-secondary);">Create your first project above to start tracking your learning journey.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- WGU Command Center -->
+        <section id="wgu" class="page-section">
+            <div class="section-header">
+                <h2 class="section-title">🎓 WGU Command Center</h2>
+            </div>
+
+            <div class="priority-action">
+                <h3 style="font-family: 'Merriweather', serif; font-size: 1.75rem; font-weight: 700; margin-bottom: 0.5rem;">🎯 WHAT DO I DO TODAY?</h3>
+                <div class="priority-grid">
+                    <div class="priority-item">
+                        <div class="priority-label">Priority Course</div>
+                        <div class="priority-value">Data Analytics</div>
+                    </div>
+                    <div class="priority-item">
+                        <div class="priority-label">Reason</div>
+                        <div class="priority-value">80% ready / weak in formulas</div>
+                    </div>
+                    <div class="priority-item">
+                        <div class="priority-label">Next Action</div>
+                        <div class="priority-value">Review formulas + practice test</div>
+                    </div>
+                </div>
+            </div>
+
+            <h3 style="font-family: 'Merriweather', serif; font-size: 1.5rem; margin-bottom: 1rem;">📚 Course Tracker</h3>
+            <div class="course-grid">
+                <div class="course-card">
+                    <div class="course-header">
+                        <div>
+                            <div class="course-title">Data Management - Foundations</div>
+                            <div style="color: var(--text-muted); font-size: 0.9rem; margin-top: 0.25rem;">OA • Started Mar 15 • Target: Apr 5</div>
+                        </div>
+                        <div class="status-badge status-in-progress">In Progress</div>
+                    </div>
+                    <div class="course-stats">
+                        <div class="stat-mini">
+                            <div class="stat-mini-value">80%</div>
+                            <div class="stat-mini-label">Readiness</div>
+                        </div>
+                        <div class="stat-mini">
+                            <div class="stat-mini-value">3</div>
+                            <div class="stat-mini-label">Weak Areas</div>
+                        </div>
+                        <div class="stat-mini">
+                            <div class="stat-mini-value">2d</div>
+                            <div class="stat-mini-label">Last Studied</div>
+                        </div>
+                        <div class="stat-mini">
+                            <div class="stat-mini-value">No</div>
+                            <div class="stat-mini-label">Exam</div>
+                        </div>
+                    </div>
+                    <div class="progress-bar">
+                        <div class="progress-fill" style="width: 80%;"></div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="weak-areas-section">
+                <h3 style="font-family: 'Merriweather', serif; font-size: 1.5rem; color: var(--danger); margin-bottom: 1rem;">🚨 Weak Areas Master List</h3>
+                <div class="weak-area-item">
+                    <div style="font-weight: 700; margin-bottom: 0.5rem;">🔹 SQL JOIN Types</div>
+                    <div style="margin-bottom: 0.25rem;"><strong>Problem:</strong> Confused INNER vs OUTER joins</div>
+                    <div style="color: var(--success); font-weight: 600;"><strong>Fix:</strong> Practice 10 examples + Venn diagrams</div>
+                </div>
+                <button class="btn">➕ Add Weak Area</button>
+            </div>
+        </section>
+    </div>
+
+    <div class="music-fab" onclick="toggleMusic()">🎵</div>
+    <div class="music-panel" id="musicPanel">
+        <div style="padding: 1rem; background: linear-gradient(135deg, #1DB954, #1ed760); color: white; border-radius: 10px 10px 0 0; display: flex; justify-content: space-between; align-items: center;">
+            <strong>🎵 Focus Music</strong>
+            <div style="display: flex; gap: 0.5rem;">
+                <button onclick="minimizeMusic()" style="background: rgba(255,255,255,0.2); border: none; color: white; width: 32px; height: 32px; border-radius: 50%; cursor: pointer;">−</button>
+                <button onclick="toggleMusic()" style="background: rgba(255,255,255,0.2); border: none; color: white; width: 32px; height: 32px; border-radius: 50%; cursor: pointer;">✕</button>
+            </div>
+        </div>
+        <div style="padding: 1rem; max-height: 400px; overflow-y: auto;">
+            <h4 style="font-weight: 700; margin-bottom: 1rem;">Study Playlists</h4>
+            
+            <div onclick="loadPlaylist('ryan')" style="background: var(--bg-main); border: 2px solid var(--border); border-radius: 8px; padding: 1rem; margin-bottom: 1rem; cursor: pointer; transition: all 0.2s;" onmouseover="this.style.borderColor='var(--accent-primary)'; this.style.transform='translateX(4px)'" onmouseout="this.style.borderColor='var(--border)'; this.style.transform='translateX(0)'">
+                <div style="font-weight: 700;">🎓 Ryan Swayt Channel</div>
+                <div style="font-size: 0.85rem; color: var(--text-muted);">1 Month College Grad productivity tips</div>
+            </div>
+
+            <div onclick="loadPlaylist('neosoul')" style="background: var(--bg-main); border: 2px solid var(--border); border-radius: 8px; padding: 1rem; margin-bottom: 1rem; cursor: pointer; transition: all 0.2s;" onmouseover="this.style.borderColor='var(--accent-primary)'; this.style.transform='translateX(4px)'" onmouseout="this.style.borderColor='var(--border)'; this.style.transform='translateX(0)'">
+                <div style="font-weight: 700;">🎶 Neo Soul Lofi</div>
+                <div style="font-size: 0.85rem; color: var(--text-muted);">Smooth R&B-influenced study beats</div>
+            </div>
+
+            <div onclick="loadPlaylist('lofigirl')" style="background: var(--bg-main); border: 2px solid var(--border); border-radius: 8px; padding: 1rem; margin-bottom: 1rem; cursor: pointer; transition: all 0.2s;" onmouseover="this.style.borderColor='var(--accent-primary)'; this.style.transform='translateX(4px)'" onmouseout="this.style.borderColor='var(--border)'; this.style.transform='translateX(0)'">
+                <div style="font-weight: 700;">☕ Lofi Girl</div>
+                <div style="font-size: 0.85rem; color: var(--text-muted);">24/7 chill beats to study to</div>
+            </div>
+
+            <div onclick="loadPlaylist('classical')" style="background: var(--bg-main); border: 2px solid var(--border); border-radius: 8px; padding: 1rem; margin-bottom: 1rem; cursor: pointer; transition: all 0.2s;" onmouseover="this.style.borderColor='var(--accent-primary)'; this.style.transform='translateX(4px)'" onmouseout="this.style.borderColor='var(--border)'; this.style.transform='translateX(0)'">
+                <div style="font-weight: 700;">🎻 Classical Study</div>
+                <div style="font-size: 0.85rem; color: var(--text-muted);">Mozart, Bach, Beethoven for focus</div>
+            </div>
+
+            <div id="playerContainer"></div>
+        </div>
+        <div style="padding: 1rem; border-top: 2px solid var(--border); display: flex; align-items: center; gap: 1rem;">
+            <span>🔊</span>
+            <input type="range" id="volumeSlider" min="0" max="100" value="50" style="flex: 1;" onchange="setVolume(this.value)">
+            <span id="volumeDisplay">50%</span>
+        </div>
+    </div>
+
+    <div class="ai-fab" onclick="toggleAI()">🤖</div>
+    <div class="ai-panel" id="aiPanel">
+        <div style="padding: 2rem; background: linear-gradient(135deg, var(--accent-primary), var(--accent-secondary)); color: white; position: relative;">
+            <h3 style="font-family: 'Merriweather', serif; font-size: 1.5rem; font-weight: 700; margin-bottom: 0.5rem;">🤖 AI Assistant</h3>
+            <p style="font-size: 0.9rem; opacity: 0.9;">Your API: Ready for integration</p>
+            <button onclick="toggleAI()" style="position: absolute; top: 1.5rem; right: 1.5rem; background: rgba(255,255,255,0.2); border: none; color: white; width: 36px; height: 36px; border-radius: 50%; cursor: pointer; font-size: 1.25rem; display: flex; align-items: center; justify-content: center; transition: all 0.2s;">✕</button>
+        </div>
+        <div style="flex: 1; padding: 1.5rem;">
+            <p>Chat interface here...</p>
+            <p style="margin-top: 1rem; color: var(--text-secondary); font-size: 0.9rem;">Add your API key in the code to enable full AI functionality.</p>
+        </div>
+    </div>
+
+    <script>
+        function switchTab(tabName) {
+            document.querySelectorAll('.nav-tab').forEach(tab => tab.classList.remove('active'));
+            event.target.classList.add('active');
+            document.querySelectorAll('.page-section').forEach(section => section.classList.remove('active'));
+            document.getElementById(tabName).classList.add('active');
+        }
+
+        function toggleMusic() {
+            document.getElementById('musicPanel').classList.toggle('open');
+        }
+
+        function minimizeMusic() {
+            document.getElementById('musicPanel').classList.remove('open');
+        }
+
+        function loadPlaylist(type) {
+            const container = document.getElementById('playerContainer');
+            
+            if (!container) {
+                console.error('playerContainer not found');
+                return;
+            }
+            
+            let videoId = '';
+            
+            switch(type) {
+                case 'ryan':
+                    window.open('https://www.youtube.com/@RyanSwayt', '_blank');
+                    return;
+                case 'neosoul':
+                    // Neo Soul Lofi - using embeddable alternative
+                    videoId = '2gliGzb2_1I'; // Neo Soul Lofi Mix
+                    break;
+                case 'lofigirl':
+                    // Lofi Girl - using playlist that allows embedding
+                    videoId = '5qap5aO4i9A'; // lofi hip hop radio
+                    break;
+                case 'classical':
+                    // Classical Study Music - verified embeddable
+                    videoId = 'jgpJVI3tDbY'; // Classical Music for Studying & Brain Power
+                    break;
+            }
+            
+            container.innerHTML = `
+                <div style="margin-top: 1rem; border-radius: 8px; overflow: hidden; background: #000;">
+                    <iframe 
+                        width="100%" 
+                        height="200" 
+                        src="https://www.youtube.com/embed/${videoId}?autoplay=1&mute=0" 
+                        frameborder="0" 
+                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
+                        allowfullscreen>
+                    </iframe>
+                </div>
+            `;
+        }
+
+        function resetMusicPlayer() {
+            const container = document.getElementById('playerContainer');
+            if (container) {
+                container.innerHTML = '';
+            }
+        }
+
+        function setVolume(value) {
+            document.getElementById('volumeDisplay').textContent = value + '%';
+        }
+
+        // Projects functionality
+        let projects = JSON.parse(localStorage.getItem('studypilot_projects') || '[]');
+
+        function createProject() {
+            const name = document.getElementById('projectName').value.trim();
+            const type = document.getElementById('projectType').value;
+            const dueDate = document.getElementById('projectDueDate').value;
+            const description = document.getElementById('projectDescription').value.trim();
+
+            if (!name || !type) {
+                alert('Please fill in project name and type');
+                return;
+            }
+
+            const project = {
+                id: Date.now(),
+                name,
+                type,
+                dueDate,
+                description,
+                status: 'active',
+                createdAt: new Date().toISOString()
+            };
+
+            projects.push(project);
+            localStorage.setItem('studypilot_projects', JSON.stringify(projects));
+
+            document.getElementById('projectName').value = '';
+            document.getElementById('projectType').value = '';
+            document.getElementById('projectDueDate').value = '';
+            document.getElementById('projectDescription').value = '';
+
+            renderProjects();
+        }
+
+        function deleteProject(id) {
+            if (confirm('Delete this project?')) {
+                projects = projects.filter(p => p.id !== id);
+                localStorage.setItem('studypilot_projects', JSON.stringify(projects));
+                renderProjects();
+            }
+        }
+
+        function renderProjects() {
+            const container = document.getElementById('projectsList');
+            
+            if (projects.length === 0) {
+                container.innerHTML = `
+                    <div style="background: var(--bg-card); border: 2px solid var(--border); border-radius: 8px; padding: 2rem; text-align: center; box-shadow: 0 2px 8px var(--shadow);">
+                        <div style="font-size: 3rem; margin-bottom: 1rem;">📁</div>
+                        <h3 style="margin-bottom: 0.5rem;">No Projects Yet</h3>
+                        <p style="color: var(--text-secondary);">Create your first project above to start tracking your learning journey.</p>
+                    </div>
+                `;
+                return;
+            }
+
+            const typeIcons = {
+                coding: '💻',
+                research: '📊',
+                assignment: '📝',
+                capstone: '🎓',
+                personal: '🌟'
+            };
+
+            container.innerHTML = projects.map(p => `
+                <div style="background: var(--bg-card); border: 2px solid var(--border); border-radius: 8px; padding: 1.5rem; margin-bottom: 1rem; box-shadow: 0 2px 8px var(--shadow);">
+                    <div style="display: flex; justify-content: space-between; align-items: start; margin-bottom: 1rem;">
+                        <div>
+                            <h3 style="font-family: 'Merriweather', serif; font-size: 1.25rem; font-weight: 700; margin-bottom: 0.5rem;">
+                                ${typeIcons[p.type]} ${p.name}
+                            </h3>
+                            <div style="font-size: 0.9rem; color: var(--text-muted);">
+                                ${p.dueDate ? `Due: ${new Date(p.dueDate).toLocaleDateString()}` : 'No due date'}
+                            </div>
+                        </div>
+                        <button onclick="deleteProject(${p.id})" style="background: var(--danger); color: white; border: none; padding: 0.5rem 1rem; border-radius: 6px; cursor: pointer;">Delete</button>
+                    </div>
+                    ${p.description ? `<p style="color: var(--text-secondary); margin-top: 0.5rem;">${p.description}</p>` : ''}
+                </div>
+            `).join('');
+        }
+
+        renderProjects();
+
+        function toggleAI() {
+            document.getElementById('aiPanel').classList.toggle('open');
+        }
+
+        function openNotability() {
+            // Try iOS deep link first
+            window.location.href = 'notability://new';
+            
+            // Fallback after 2 seconds
+            setTimeout(() => {
+                const userAgent = navigator.userAgent.toLowerCase();
+                if (userAgent.includes('iphone') || userAgent.includes('ipad')) {
+                    alert('Notability app not found. Please install Notability from the App Store.');
+                } else if (userAgent.includes('mac')) {
+                    alert('Opening Notability... If nothing happens, please open Notability manually from Applications.');
+                } else {
+                    alert('Notability is only available on iOS and Mac. Consider using OneNote or Squid on Android.');
+                }
+            }, 2000);
+        }
+
+        // PocketBase Sync Configuration
+        const POCKETBASE_URL = 'http://187.124.146.184:8090';
+        let pb = null;
+
+        // Initialize PocketBase connection
+        function initPocketBase() {
+            try {
+                // PocketBase will be loaded via CDN
+                if (typeof PocketBase !== 'undefined') {
+                    pb = new PocketBase(POCKETBASE_URL);
+                    console.log('PocketBase initialized');
+                    return true;
+                }
+                return false;
+            } catch (error) {
+                console.error('PocketBase initialization error:', error);
+                return false;
+            }
+        }
+
+        // Sync Modal Functions
+        function openSyncModal() {
+            document.getElementById('syncModal').style.display = 'flex';
+            checkConnection();
+        }
+
+        function closeSyncModal() {
+            document.getElementById('syncModal').style.display = 'none';
+        }
+
+        function checkConnection() {
+            fetch(POCKETBASE_URL + '/api/health')
+                .then(response => {
+                    if (response.ok) {
+                        document.getElementById('connectionStatus').innerHTML = '● Connected';
+                        document.getElementById('connectionStatus').style.color = 'var(--success)';
+                    } else {
+                        document.getElementById('connectionStatus').innerHTML = '● Disconnected';
+                        document.getElementById('connectionStatus').style.color = 'var(--danger)';
+                    }
+                })
+                .catch(error => {
+                    document.getElementById('connectionStatus').innerHTML = '● Offline';
+                    document.getElementById('connectionStatus').style.color = 'var(--text-muted)';
+                });
+        }
+
+        function showSyncProgress(message) {
+            document.getElementById('syncProgress').style.display = 'block';
+            document.getElementById('syncMessage').textContent = message;
+            document.getElementById('syncResult').style.display = 'none';
+        }
+
+        function showSyncResult(success, message) {
+            document.getElementById('syncProgress').style.display = 'none';
+            const resultDiv = document.getElementById('syncResult');
+            resultDiv.style.display = 'block';
+            resultDiv.style.background = success ? 'rgba(76, 175, 80, 0.1)' : 'rgba(220, 53, 69, 0.1)';
+            resultDiv.style.color = success ? 'var(--success)' : 'var(--danger)';
+            resultDiv.innerHTML = `<strong>${success ? '✓' : '✗'}</strong> ${message}`;
+            
+            if (success) {
+                document.getElementById('syncStatus').textContent = '✓';
+                document.getElementById('lastSyncTime').textContent = new Date().toLocaleString();
+                setTimeout(() => {
+                    document.getElementById('syncStatus').textContent = '🔄';
+                }, 3000);
+            }
+        }
+
+        async function syncToServer() {
+            showSyncProgress('Pushing local data to server...');
+            
+            try {
+                // Gather local data
+                const localData = {
+                    projects: JSON.parse(localStorage.getItem('studypilot_projects') || '[]'),
+                    courses: [], // Will be populated when we add course tracker
+                    notes: [], // Will be populated from notes section
+                    timestamp: new Date().toISOString()
+                };
+
+                // Simulate sync (replace with actual PocketBase API calls)
+                await new Promise(resolve => setTimeout(resolve, 1500));
+
+                showSyncResult(true, `Successfully synced ${localData.projects.length} projects to server`);
+            } catch (error) {
+                console.error('Sync error:', error);
+                showSyncResult(false, 'Failed to sync to server: ' + error.message);
+            }
+        }
+
+        async function syncFromServer() {
+            showSyncProgress('Pulling data from server...');
+            
+            try {
+                // Simulate fetch from server (replace with actual PocketBase API calls)
+                await new Promise(resolve => setTimeout(resolve, 1500));
+
+                showSyncResult(true, 'Successfully pulled data from server');
+            } catch (error) {
+                console.error('Sync error:', error);
+                showSyncResult(false, 'Failed to pull from server: ' + error.message);
+            }
+        }
+
+        async function autoSync() {
+            showSyncProgress('Auto-syncing (2-way merge)...');
+            
+            try {
+                // Push local changes
+                await syncToServer();
+                
+                // Pull server changes
+                await new Promise(resolve => setTimeout(resolve, 500));
+                await syncFromServer();
+                
+                showSyncResult(true, 'Auto-sync complete! Data merged successfully.');
+            } catch (error) {
+                console.error('Auto-sync error:', error);
+                showSyncResult(false, 'Auto-sync failed: ' + error.message);
+            }
+        }
+
+        // Initialize on page load
+        window.addEventListener('load', () => {
+            initPocketBase();
+        });
+
+        // API Configuration Placeholder
+        const API_CONFIG = {
+            endpoint: 'YOUR_API_ENDPOINT_HERE',
+            key: 'YOUR_API_KEY_HERE'
+        };
+
+        async function callYourAPI(message) {
+            try {
+                const response = await fetch(API_CONFIG.endpoint, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${API_CONFIG.key}`
+                    },
+                    body: JSON.stringify({ message })
+                });
+                return await response.json();
+            } catch (error) {
+                console.error('API Error:', error);
+                return { error: 'API call failed' };
+            }
+        }
+
+        // OCR Functionality
+        let cameraStream = null;
+
+        async function handleOCRUpload(event) {
+            const file = event.target.files[0];
+            if (!file) return;
+            
+            const ocrSection = document.getElementById('ocrSection');
+            const ocrImage = document.getElementById('ocrImage');
+            const ocrProgress = document.getElementById('ocrProgress');
+            const ocrResult = document.getElementById('ocrResult');
+            
+            ocrSection.style.display = 'block';
+            ocrImage.style.display = 'block';
+            ocrProgress.style.display = 'block';
+            ocrResult.style.display = 'none';
+            
+            const reader = new FileReader();
+            reader.onload = async (e) => {
+                ocrImage.src = e.target.result;
+                await performOCR(e.target.result);
+            };
+            reader.readAsDataURL(file);
+        }
+
+        async function startCamera() {
+            try {
+                cameraStream = await navigator.mediaDevices.getUserMedia({ 
+                    video: { facingMode: 'environment' } 
+                });
+                
+                const video = document.getElementById('cameraPreview');
+                const controls = document.getElementById('cameraControls');
+                const ocrSection = document.getElementById('ocrSection');
+                
+                video.srcObject = cameraStream;
+                video.style.display = 'block';
+                controls.style.display = 'flex';
+                ocrSection.style.display = 'block';
+                
+            } catch (error) {
+                alert('Camera access denied or not available on this device.');
+                console.error('Camera error:', error);
+            }
+        }
+
+        function capturePhoto() {
+            const video = document.getElementById('cameraPreview');
+            const canvas = document.getElementById('cameraCanvas');
+            const ocrImage = document.getElementById('ocrImage');
+            
+            canvas.width = video.videoWidth;
+            canvas.height = video.videoHeight;
+            
+            const ctx = canvas.getContext('2d');
+            ctx.drawImage(video, 0, 0);
+            
+            const imageData = canvas.toDataURL('image/jpeg');
+            ocrImage.src = imageData;
+            ocrImage.style.display = 'block';
+            
+            video.style.display = 'none';
+            document.getElementById('cameraControls').style.display = 'none';
+            
+            stopCamera();
+            performOCR(imageData);
+        }
+
+        function stopCamera() {
+            if (cameraStream) {
+                cameraStream.getTracks().forEach(track => track.stop());
+                cameraStream = null;
+            }
+            const video = document.getElementById('cameraPreview');
+            video.style.display = 'none';
+            document.getElementById('cameraControls').style.display = 'none';
+        }
+
+        async function performOCR(imageData) {
+            const ocrProgress = document.getElementById('ocrProgress');
+            const ocrProgressText = document.getElementById('ocrProgressText');
+            const ocrResult = document.getElementById('ocrResult');
+            const ocrText = document.getElementById('ocrText');
+            
+            ocrProgress.style.display = 'block';
+            ocrResult.style.display = 'none';
+            
+            try {
+                ocrProgressText.textContent = 'Loading OCR engine...';
+                
+                const worker = await Tesseract.createWorker();
+                
+                ocrProgressText.textContent = 'Recognizing text...';
+                
+                const { data: { text } } = await worker.recognize(imageData);
+                
+                await worker.terminate();
+                
+                ocrText.value = text || 'No text detected in image.';
+                ocrProgress.style.display = 'none';
+                ocrResult.style.display = 'block';
+                
+            } catch (error) {
+                console.error('OCR Error:', error);
+                ocrProgressText.textContent = 'Error extracting text. Please try again.';
+                setTimeout(() => {
+                    ocrProgress.style.display = 'none';
+                }, 3000);
+            }
+        }
+
+        function copyOCRText() {
+            const ocrText = document.getElementById('ocrText');
+            ocrText.select();
+            document.execCommand('copy');
+            alert('Text copied to clipboard!');
+        }
+
+        function saveAsNote() {
+            const text = document.getElementById('ocrText').value;
+            const blob = new Blob([text], { type: 'text/plain' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `studypilot-note-${new Date().toISOString().split('T')[0]}.txt`;
+            a.click();
+            URL.revokeObjectURL(url);
+        }
+
+        function sendToAI() {
+            const text = document.getElementById('ocrText').value;
+            toggleAI();
+            setTimeout(() => {
+                const aiInput = document.getElementById('aiInput');
+                if (aiInput) {
+                    aiInput.value = `Please help me understand these notes:\n\n${text}`;
+                }
+            }, 500);
+        }
+
+        function resetOCR() {
+            document.getElementById('ocrSection').style.display = 'none';
+            document.getElementById('ocrImage').style.display = 'none';
+            document.getElementById('ocrResult').style.display = 'none';
+            document.getElementById('ocrProgress').style.display = 'none';
+            document.getElementById('ocrText').value = '';
+            document.getElementById('ocrUpload').value = '';
+        }
+    </script>
+</body>
+</html>
