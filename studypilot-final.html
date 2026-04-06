@@ -893,20 +893,47 @@
                 <p style="color: var(--text-secondary);">Curated playlists for deep focus and productivity</p>
             </div>
 
+            <!-- Custom Music Picker -->
+            <div style="background: linear-gradient(135deg, var(--accent-primary), var(--accent-secondary)); color: white; border-radius: 12px; padding: 2rem; margin-bottom: 2rem; box-shadow: 0 4px 16px var(--shadow);">
+                <h3 style="font-family: 'Merriweather', serif; font-size: 1.5rem; font-weight: 700; margin-bottom: 1rem;">🎧 Custom Music Picker</h3>
+                <p style="opacity: 0.9; margin-bottom: 1rem;">Paste your favorite YouTube music link below:</p>
+                <div style="display: flex; gap: 1rem; flex-wrap: wrap;">
+                    <input type="text" id="customMusicURL" placeholder="https://www.youtube.com/watch?v=..." style="flex: 1; min-width: 300px; padding: 0.75rem; border: 2px solid rgba(255,255,255,0.3); border-radius: 8px; background: rgba(255,255,255,0.15); color: white; font-size: 1rem;">
+                    <button onclick="loadCustomMusic()" style="padding: 0.75rem 2rem; background: rgba(255,255,255,0.2); border: 2px solid white; border-radius: 8px; color: white; font-weight: 700; cursor: pointer; transition: all 0.2s;">Play ▶</button>
+                </div>
+                <div id="customPlayer" style="margin-top: 1.5rem;"></div>
+            </div>
+
             <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(350px, 1fr)); gap: 2rem;">
-                <!-- Neo Soul Lofi -->
+                <!-- 9 Month College Grad - Ryan Swayt -->
+                <div style="background: var(--bg-card); border: 2px solid var(--border); border-radius: 12px; padding: 1.5rem; box-shadow: 0 4px 16px var(--shadow);">
+                    <div style="display: flex; align-items: center; gap: 1rem; margin-bottom: 1rem;">
+                        <div style="width: 60px; height: 60px; background: linear-gradient(135deg, #27ae60, #82e0aa); border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 2rem;">🎓</div>
+                        <div>
+                            <h3 style="font-family: 'Merriweather', serif; font-size: 1.25rem; font-weight: 700; margin-bottom: 0.25rem;">9 Month College Grad</h3>
+                            <p style="font-size: 0.9rem; color: var(--text-muted);">Ryan Swayt</p>
+                        </div>
+                    </div>
+                    <div style="padding: 2rem; background: var(--bg-secondary); border-radius: 8px; text-align: center;">
+                        <p style="margin-bottom: 1rem; color: var(--text-secondary);">Accelerated learning strategies and WGU degree tips</p>
+                        <a href="https://www.youtube.com/@RyanSwayt" target="_blank" class="btn btn-primary" style="text-decoration: none;">Visit Channel →</a>
+                    </div>
+                    <p style="margin-top: 1rem; font-size: 0.9rem; color: var(--text-secondary);">Perfect for: Motivation, study techniques, degree acceleration</p>
+                </div>
+
+                <!-- Soulfi Room -->
                 <div style="background: var(--bg-card); border: 2px solid var(--border); border-radius: 12px; padding: 1.5rem; box-shadow: 0 4px 16px var(--shadow);">
                     <div style="display: flex; align-items: center; gap: 1rem; margin-bottom: 1rem;">
                         <div style="width: 60px; height: 60px; background: linear-gradient(135deg, #8e44ad, #c39bd3); border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 2rem;">🎶</div>
                         <div>
-                            <h3 style="font-family: 'Merriweather', serif; font-size: 1.25rem; font-weight: 700; margin-bottom: 0.25rem;">Neo Soul Lofi</h3>
-                            <p style="font-size: 0.9rem; color: var(--text-muted);">Smooth R&B vibes</p>
+                            <h3 style="font-family: 'Merriweather', serif; font-size: 1.25rem; font-weight: 700; margin-bottom: 0.25rem;">Soulfi Room</h3>
+                            <p style="font-size: 0.9rem; color: var(--text-muted);">Neo Soul Lofi Vibes</p>
                         </div>
                     </div>
                     <div style="border-radius: 8px; overflow: hidden; background: #000;">
                         <iframe width="100%" height="200" src="https://www.youtube.com/embed/2gliGzb2_1I?autoplay=0" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
                     </div>
-                    <p style="margin-top: 1rem; font-size: 0.9rem; color: var(--text-secondary);">Perfect for: Deep work, coding sessions, writing</p>
+                    <p style="margin-top: 1rem; font-size: 0.9rem; color: var(--text-secondary);">Perfect for: Deep work, coding sessions, creative flow</p>
                 </div>
 
                 <!-- Lofi Girl -->
@@ -937,22 +964,6 @@
                         <iframe width="100%" height="200" src="https://www.youtube.com/embed/jgpJVI3tDbY?autoplay=0" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
                     </div>
                     <p style="margin-top: 1rem; font-size: 0.9rem; color: var(--text-secondary);">Perfect for: Problem-solving, exam prep, memorization</p>
-                </div>
-
-                <!-- Ryan Swayt -->
-                <div style="background: var(--bg-card); border: 2px solid var(--border); border-radius: 12px; padding: 1.5rem; box-shadow: 0 4px 16px var(--shadow);">
-                    <div style="display: flex; align-items: center; gap: 1rem; margin-bottom: 1rem;">
-                        <div style="width: 60px; height: 60px; background: linear-gradient(135deg, #27ae60, #82e0aa); border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 2rem;">🎓</div>
-                        <div>
-                            <h3 style="font-family: 'Merriweather', serif; font-size: 1.25rem; font-weight: 700; margin-bottom: 0.25rem;">Ryan Swayt</h3>
-                            <p style="font-size: 0.9rem; color: var(--text-muted);">1 Month College Grad</p>
-                        </div>
-                    </div>
-                    <div style="padding: 2rem; background: var(--bg-secondary); border-radius: 8px; text-align: center;">
-                        <p style="margin-bottom: 1rem; color: var(--text-secondary);">Productivity tips and study strategies for accelerated learning</p>
-                        <a href="https://www.youtube.com/@RyanSwayt" target="_blank" class="btn btn-primary" style="text-decoration: none;">Visit Channel →</a>
-                    </div>
-                    <p style="margin-top: 1rem; font-size: 0.9rem; color: var(--text-secondary);">Perfect for: Motivation, study techniques, WGU tips</p>
                 </div>
             </div>
 
@@ -1160,6 +1171,58 @@
 
         function setVolume(value) {
             document.getElementById('volumeDisplay').textContent = value + '%';
+        }
+
+        // Custom Music Picker
+        function loadCustomMusic() {
+            const url = document.getElementById('customMusicURL').value.trim();
+            const container = document.getElementById('customPlayer');
+            
+            if (!url) {
+                alert('Please paste a YouTube URL first!');
+                return;
+            }
+            
+            // Extract video ID from various YouTube URL formats
+            let videoId = '';
+            
+            try {
+                if (url.includes('youtube.com/watch?v=')) {
+                    videoId = url.split('v=')[1]?.split('&')[0];
+                } else if (url.includes('youtu.be/')) {
+                    videoId = url.split('youtu.be/')[1]?.split('?')[0];
+                } else if (url.includes('youtube.com/embed/')) {
+                    videoId = url.split('embed/')[1]?.split('?')[0];
+                }
+                
+                if (!videoId) {
+                    alert('Invalid YouTube URL. Please use a format like:\nhttps://www.youtube.com/watch?v=VIDEO_ID');
+                    return;
+                }
+                
+                container.innerHTML = `
+                    <div style="border-radius: 8px; overflow: hidden; background: #000;">
+                        <iframe 
+                            width="100%" 
+                            height="300" 
+                            src="https://www.youtube.com/embed/${videoId}?autoplay=1" 
+                            frameborder="0" 
+                            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
+                            allowfullscreen>
+                        </iframe>
+                    </div>
+                    <button onclick="clearCustomMusic()" style="margin-top: 1rem; padding: 0.75rem 1.5rem; background: rgba(255,255,255,0.2); border: 2px solid white; border-radius: 8px; color: white; font-weight: 600; cursor: pointer;">Clear Player</button>
+                `;
+                
+            } catch (error) {
+                alert('Error loading video. Please check the URL and try again.');
+                console.error(error);
+            }
+        }
+
+        function clearCustomMusic() {
+            document.getElementById('customPlayer').innerHTML = '';
+            document.getElementById('customMusicURL').value = '';
         }
 
         // Projects functionality
